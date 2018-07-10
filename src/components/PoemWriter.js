@@ -1,28 +1,37 @@
 import React from "react";
 
+function validatePoem(poem){
+  const poemLines = poem.split('\n');
+  return (
+    poemLines.length === 3 &&
+    poemLines[0].trim().split(' ').length === 5 &&
+    poemLines[1].trim().split(' ').length === 3 &&
+    poemLines[2].trim().split(' ').length === 5
+  );
+}
+
 class PoemWriter extends React.Component {
   constructor() {
     super();
     this.state = {
       value: '',
-      error: '<div id="poem-validation-error" style={{ color: "red" }}>This poem is not written in the right structure!</div>'
+      error: <div id="poem-validation-error" style={{ color: "red" }}>This poem is not written in the right structure!</div>
     };
-    this.poemLines = [];
 
     this.handleOnChange = this.handleOnChange.bind(this);
   }
 
   handleOnChange(event){
-    this.setState({ value: event.target.value });
-
-    this.poemLines = event.target.value.split('\n');
-    if ( this.poemLines.length === 3 &&
-         this.poemLines[0].trim().split(' ').length === 5 &&
-         this.poemLines[1].trim().split(' ').length === 3 &&
-         this.poemLines[2].trim().split(' ').length === 5 ){
-      this.setState({ error: '' });
+    if (validatePoem(event.target.value)){
+      this.setState({
+        value: event.target.value,
+        error: null
+      });
     } else {
-      this.setState({ error: '<div id="poem-validation-error" style={{ color: "red" }}>This poem is not written in the right structure!</div>' });
+      this.setState({
+        value: event.target.value,
+        error: <div id="poem-validation-error" style={{ color: "red" }}>This poem is not written in the right structure!</div>
+      });
     }
   }
 
